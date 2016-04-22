@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.IO;
@@ -18,36 +19,42 @@ namespace ml_project
         {
             _reader = reader;
             Parse();
+            CleanData();
         }
 
         private void Parse()
         {
             _internalTable = Matrix.Parse(_reader.ReadToEnd());
+        }
 
+        private void CleanData()
+        {
+            List<int> columnsToDrop = new List<int>();
 
-            //while((line = _reader.ReadLine()) != null)
-            //{
-            //    line = line.Trim();
+            for(int x = 0; x < _internalTable.GetLength(1); x++)
+            {
+                double[] inner = _internalTable.GetColumn(x);
 
-            //    string[] split = line.Split(' ');
+                double firstValue = inner[0];
+                bool add = true; 
 
-            //    if(table.Columns.Count == 0)
-            //    {
-            //        CreateColums(split.Length, table);
-            //    }
+                for(int y = 0; y < inner.Length; y++)
+                {
+                    if (firstValue != inner[y])
+                    {
+                        add = false;
+                        break;
+                    }
+                }
+                if (add)
+                    columnsToDrop.Add(x);
+            }
 
-            //    // convert them all over
-            //    double[] row = new double[split.Length];
-
-            //    for(int i = 0; i < split.Length; i++)
-            //    {
-            //        row[i] = double.Parse(split[i]);
-            //    }
-
-            //    // lets chop off the last column                
-
-            //    table.Rows.Add(split);
-            //}
+            foreach(int i in columnsToDrop)
+            {
+                Console.WriteLine("Bad Column: {0}... dropping", i);
+            }
+            _internalTable = _internalTable.Remove(new int[] { }, columnsToDrop.ToArray());
         }
 
         public double[,] WithClass()
@@ -57,7 +64,7 @@ namespace ml_project
 
         public double[,] WithoutClass()
         {
-            int length = _internalTable.GetLength(1) - 1;
+            int length = _internalTable.GetLength(1) - 2;
             
             return _internalTable.Submatrix(null, 0, length);
         }
