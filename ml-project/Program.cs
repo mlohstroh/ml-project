@@ -25,8 +25,10 @@ namespace ml_project
             tree.Run();
 
             //DataGridBox.Show(bayes.Distributions).Hold();
-            Console.WriteLine("Press any key to continue...");
-            Console.ReadKey(true);
+            Console.WriteLine("Type quit to continue...");
+            string exit = null;
+            while ((exit = Console.ReadLine()) != "quit") 
+            { }
         }
     }
 }

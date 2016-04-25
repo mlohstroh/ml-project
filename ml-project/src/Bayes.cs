@@ -26,7 +26,13 @@ namespace ml_project
 
             int colums = dataTable.GetLength(1);
 
-            var bayes = new NaiveBayes<NormalDistribution>(2, colums, new NormalDistribution());
+            //// bagging things
+            //var bagged = i.GetBaggedInputs(10000);
+            //var baggedInputs = bagged.Submatrix(null, 0, bagged[0].Length - 2);
+            //var baggedClasses = bagged.GetColumn(bagged[0].Length - 1).ToInt32();
+
+            var unbaggedBayes = new NaiveBayes<NormalDistribution>(2, colums, new NormalDistribution());
+            //var baggedBayes = new NaiveBayes<NormalDistribution>(2, colums, new NormalDistribution());
 
             Console.WriteLine("Training NBayes...");
             var classes = i.GetClasses();
@@ -42,9 +48,9 @@ namespace ml_project
 
             //DataGridBox.Show(array, "Normalized").Hold();
 
-            var error = bayes.Estimate(dataTable.ToArray(), classes);
+            var unbaggedError = unbaggedBayes.Estimate(dataTable.ToArray(), classes);
 
-            Console.WriteLine("Estimated NBayes Error: {0}", error);
+            Console.WriteLine("Estimated NBayes Error: (unbagged) {0}", unbaggedError);
 
             var array = dataTable.ToArray();
 
@@ -53,7 +59,7 @@ namespace ml_project
             for (int x = 0; x < array.Length; x++)
             {
                 var inner = array[x];
-                int classification = bayes.Compute(inner);
+                int classification = unbaggedBayes.Compute(inner);
 
                 if (classification == classes[x])
                 {
@@ -61,6 +67,7 @@ namespace ml_project
                 }
             }
 
+            Console.WriteLine("Unbagged Result");
             Console.WriteLine("{0} correct out of {1}", correct, classes.Length);
             Console.WriteLine("Percentage: {0}", ((float)correct / (float)classes.Length) * 100);
         }

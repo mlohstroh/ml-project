@@ -24,7 +24,10 @@ namespace ml_project
 
         private void Parse()
         {
-            _internalTable = Matrix.Parse(_reader.ReadToEnd());
+            string import = _reader.ReadToEnd();
+
+            import = import.Replace("?", "");
+            _internalTable = Matrix.Parse(import);
         }
 
         private void CleanData()
@@ -64,9 +67,14 @@ namespace ml_project
 
         public double[,] WithoutClass()
         {
-            int length = _internalTable.GetLength(1) - 2;
-            
-            return _internalTable.Submatrix(null, 0, length);
+            return WithoutClass(_internalTable);
+        }
+
+        public double[,] WithoutClass(double[,] table)
+        {
+            int length = table.GetLength(1) - 2;
+
+            return table.Submatrix(null, 0, length);
         }
 
         public int[] GetClasses()
@@ -77,6 +85,23 @@ namespace ml_project
         public int FeatureCount()
         {
             return WithoutClass().GetRow(0).Length;
+        }
+
+        public double[][] GetBaggedInputs(int bagSize)
+        {
+            double[][] baggedResults = new double[bagSize][];
+
+            var cachedInputs = _internalTable.ToArray();
+
+            Random rand = new Random((int)DateTime.UtcNow.Ticks);
+
+            for(int i = 0; i < bagSize; i++)
+            {
+                double[] vector = cachedInputs[rand.Next(cachedInputs.Length)];
+                baggedResults[i] = vector;
+            }
+
+            return baggedResults;
         }
     }
 
