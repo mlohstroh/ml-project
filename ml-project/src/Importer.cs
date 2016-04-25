@@ -73,6 +73,11 @@ namespace ml_project
         {
             return _internalTable.GetColumn(_internalTable.GetLength(1) - 1).ToInt32();
         }
+
+        public int FeatureCount()
+        {
+            return WithoutClass().GetRow(0).Length;
+        }
     }
 
     /*
