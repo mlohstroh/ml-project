@@ -53,12 +53,16 @@
     <Compile Include="src\DTree.cs" />
     <Compile Include="src\Importer.cs" />
     <Compile Include="src\Learner.cs" />
+    <Compile Include="src\SVM.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="data\final-nmv-noclass.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="data\prelim-nmv-noclass.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

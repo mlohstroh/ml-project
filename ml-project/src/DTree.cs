@@ -14,7 +14,7 @@ namespace ml_project
     {
         public void Run()
         {
-            Importer testData = new Importer(File.OpenText("data\\prelim-nmv-noclass.txt"));
+            Importer testData = new Importer(File.OpenText("data\\final-nmv-noclass.txt"));
 
             Importer importer = new Importer(File.OpenText("data\\train.nmv.txt"));
 
@@ -51,15 +51,15 @@ namespace ml_project
             Console.WriteLine("Training DecisionTree...");
             double estimatedErrorC45 = tree.Run(matrix, classes);
 
-            Console.WriteLine("Training Trimmed DecisionTree...");
-            double estimatedErrorTrimmed = trimmedLearner.Run(trainInputs, trainClasses);
+            //Console.WriteLine("Training Trimmed DecisionTree...");
+            //double estimatedErrorTrimmed = trimmedLearner.Run(trainInputs, trainClasses);
 
             // this is just funny
             //File.WriteAllText("Best.cs", t.ToCode("BestClass"));
 
             Console.WriteLine("Estimated error: {0}", estimatedErrorC45);
             //Console.WriteLine("Height of finished tree: {0}", t.GetHeight
-            Console.WriteLine("Estimated error (trimmed): {0}", estimatedErrorTrimmed);
+            //Console.WriteLine("Estimated error (trimmed): {0}", estimatedErrorTrimmed);
 
             int correctAll = 0;
             int correctTrimmed = 0;
@@ -74,41 +74,36 @@ namespace ml_project
                     correctAll++;
                 }
 
-                classification = trimmed.Compute(inner);
-                if(classification == classes[x])
-                {
-                    correctTrimmed++;
-                }
+                //classification = trimmed.Compute(inner);
+                //if(classification == classes[x])
+                //{
+                  //  correctTrimmed++;
+                //}
             }
 
             Console.WriteLine("{0} correct out of {1} (all)", correctAll, classes.Length);
             Console.WriteLine("Percentage: {0} (all)", ((float)correctAll / (float)classes.Length) * 100);
 
-            Console.WriteLine("{0} correct out of {1} (trimmed)", correctTrimmed, classes.Length);
-            Console.WriteLine("Percentage: {0} (trimmed)", ((float)correctTrimmed / (float)classes.Length) * 100);
+            //Console.WriteLine("{0} correct out of {1} (trimmed)", correctTrimmed, classes.Length);
+            //Console.WriteLine("Percentage: {0} (trimmed)", ((float)correctTrimmed / (float)classes.Length) * 100);
 
 
-            // I need with the class because this test data doesn't include the class
+            //// I need with the class because this test data doesn't include the class
             var testMatrix = testData.WithClass().ToArray();
 
             List<int> basePredictions = new List<int>();
 
-            int differences = 0;
+            //int differences = 0;
 
             for(int idx = 0; idx < testMatrix.Length; idx++)
             {
                 var inner = testMatrix[idx];
                 int classification = @base.Compute(inner);
-                int trimmedClass = trimmed.Compute(inner);
+                //int trimmedClass = trimmed.Compute(inner);
                 basePredictions.Add(classification);
-
-                if(trimmedClass != classification)
-                {
-                    differences++;
-                }
             }
 
-            Console.WriteLine("Differences: {0} out of {1} inputs", differences, testMatrix.Length);
+            //Console.WriteLine("Differences: {0} out of {1} inputs", differences, testMatrix.Length);
 
             if(!Directory.Exists("output"))
                 Directory.CreateDirectory("output");

@@ -16,13 +16,16 @@ namespace ml_project
         static void Main(string[] args)
         {
 
-            ILearner bayes = new Bayes();
+            //ILearner bayes = new Bayes();
 
-            bayes.Run();
+            //bayes.Run();
 
             ILearner tree = new DTree();
 
             tree.Run();
+
+            //ILearner svm = new SVM();
+            //svm.Run();
 
             //DataGridBox.Show(bayes.Distributions).Hold();
             Console.WriteLine("Type quit to continue...");
